@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mes Favoris - Vélib'</title>
+    <!-- Insérer ici les liens vers les fichiers CSS -->
+</head>
+<body>
+    <header>
+    </header>
+
+    <main>
+        {% if user_stations %}
+            <ul>
+                {% for station in user_stations %}
+                    <li>
+                        <h2>{{ station.name }}</h2>
+                        <p>Adresse: {{ station.address }}</p>
+                        <p>Vélibs disponibles: {{ station.available_bikes }}</p>
+                        <p>Places disponibles: {{ station.available_slots }}</p>
+
+                        <button onclick="location.href='{{ url_for('suppression_station_favorite', station=station.id) }}'">Supprimer des favoris</button>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Vous n'avez pas de stations favorites.</p>
+        {% endif %}
+        
+        <button onclick="location.href='{{ url_for('carte') }}'">Ajouter une station favorite</button>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Vélib' App</p>
+    </footer>
+
+</body>
+</html>

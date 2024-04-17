@@ -1,24 +1,28 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for
+
+
 app = Flask("velib")
 
 
 @app.get("/")
 def accueil() :
-    return """<h1>Accueil</h1>"""
+    return render_template('index.html.jinja')
+    
 
 @app.get("/carte")
 def carte() :
-    return """<h1>Carte</h1>"""
+     return render_template('carte.html.jinja')
 
 @app.route("/carte/<station>")
 def carte_station(station) :
     #Faire un truc avec la station
-    return f"""<h1>Carte + {station}</h1>"""
+    return render_template('carte_station.html.jinja', station=station)
 
 @app.get("/favoris")
 def favoris() :
     #Requête(s) SQL pour aller chercher les favoris stockés en BDD
-    return f"""<h1>Favoris</h1>"""
+    user_stations = []  # Remplacer par la vraie requête pour récupérer les favoris
+    return render_template('favoris.html.jinja', user_stations=user_stations)
 
 @app.get("/favoris/<station>")
 def station_favorite() :
@@ -50,7 +54,7 @@ def login_process() :
 @app.get("/login")
 def login() :
     #Page de Connexion
-    return f"""<h1>Se connecter</h1>"""
+    return render_template('login.html.jinja')
 
 @app.get("/signup")
 def inscription() :
@@ -60,7 +64,7 @@ def inscription() :
 @app.post("/signup")
 def traitement_inscription() :
     #traiter les information d'inscription et ajouter les cookies
-    return f"""<h1>Inscription</h1>"""
+     return render_template('signup.html.jinja')
 
 @app.route("/Logout")
 def deconnexion() :
