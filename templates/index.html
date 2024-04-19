@@ -1,125 +1,134 @@
 <!DOCTYPE html>
-    <html>
-        <head>
-            <title>Carte des Stations Velib</title>
-            <meta charset="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-        </head>
+<html>
+<head>
+    <title>Carte des Stations Velib</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+<h3>Bonjour (prenom)</h3>
 
-        <body>
 
-            <h3>Bonjour (prenom)</h3>
-            
-            <a href="/favoris"><button>Mes stations favorites</button></a>
-            
-            <div id="favoriteList" style="padding: 20px;">
-                <h4>Mes stations favorites:</h4>
-                <ul id="favorites"></ul>
-            </div>
-            
-            <div id="map" style="width: 100%; height: 750px;"></div>
-            <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<div id="favoriteList" style="padding: 20px;">
+    <h4>Mes stations favorites:</h4>
+    <ul id="favorites"></ul>
+</div>
 
-            <script>
-                var favoris = []
-                var stations = [
-                    { name: "Station de Montmartre", latitude: 48.8867, longitude: 2.3431, available_bikes: 20 },
-                    { name: "Station de Louvre", latitude: 48.8606, longitude: 2.3376, available_bikes: 18 },
-                    { name: "Station de Bastille", latitude: 48.8530, longitude: 2.3698, available_bikes: 15 },
-                    { name: "Station de Tour Eiffel", latitude: 48.8584, longitude: 2.2945, available_bikes: 10 },
-                    { name: "Station de Champs-Élysées", latitude: 48.8696, longitude: 2.3079, available_bikes: 12 },
-                    { name: "Station de Montparnasse", latitude: 48.8422, longitude: 2.3219, available_bikes: 16 },
-                    { name: "Station de La Villette", latitude: 48.8936, longitude: 2.3909, available_bikes: 22 },
-                    { name: "Station de Marais", latitude: 48.8587, longitude: 2.3584, available_bikes: 9 },
-                    { name: "Station de Place d'Italie", latitude: 48.8313, longitude: 2.3558, available_bikes: 14 },
-                    { name: "Station de République", latitude: 48.8679, longitude: 2.3631, available_bikes: 13 }
-                ];
-                var map = L.map('map').setView([48.8566, 2.3522], 12);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
-                }).addTo(map);
+<div id="map" style="width: 100%; height: 750px;"></div>
 
-                // var bikeIcon = L.icon({
-                //     iconUrl: 'bike-icon.jpeg', 
-                //     iconSize: [38, 38], 
-                //     iconAnchor: [22, 94], 
-                //     popupAnchor: [-3, -76] 
-                // });
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        var latlng = [position.coords.latitude, position.coords.longitude];
-                        console.log(latlng);
+<script>
+    var favoris = [];
+    var markers = []; // Array to hold marker references
+    var map = L.map('map').setView([48.8566, 2.3522], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
-                        var markerUser = L.marker(latlng).addTo(map)
-                            .bindPopup("Vous êtes ici").openPopup();
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var latlng = [position.coords.latitude, position.coords.longitude];
+            var markerUser = L.marker(latlng).addTo(map)
+                .bindPopup("Vous êtes ici").openPopup();
+            map.setView(latlng, 12);
+        });
+    } else {
+        alert("Géolocalisation non supportée par votre navigateur.");
+    }
 
-                        map.setView(latlng, 12);
-                    });
-                } else {
-                    alert("Géolocalisation non supportée par votre navigateur.");
-                }
+    var stations = [
+        { name: "Station de Montmartre", latitude: 48.8867, longitude: 2.3431, available_bikes: 20, total_docks: 30, open: true, hours: "24/7", bikes_types: { mechanical: 15, electric: 5 }, contact: "+33123456789" },
+        { name: "Station de Louvre", latitude: 48.8606, longitude: 2.3376, available_bikes: 18, total_docks: 25, open: true, hours: "06:00-23:00", bikes_types: { mechanical: 10, electric: 8 }, contact: "+33123456780" },
+        { name: "Station de Bastille", latitude: 48.8530, longitude: 2.3698, available_bikes: 15, total_docks: 20, open: false, hours: "00:00-05:00", bikes_types: { mechanical: 12, electric: 3 }, contact: "+33123456781" },
+        { name: "Station de Tour Eiffel", latitude: 48.8584, longitude: 2.2945, available_bikes: 10, total_docks: 15, open: true, hours: "24/7", bikes_types: { mechanical: 7, electric: 3 }, contact: "+33123456782" },
+        { name: "Station de Champs-Élysées", latitude: 48.8696, longitude: 2.3079, available_bikes: 12, total_docks: 18, open: true, hours: "24/7", bikes_types: { mechanical: 9, electric: 3 }, contact: "+33123456783" },
+        { name: "Station de Montparnasse", latitude: 48.8422, longitude: 2.3219, available_bikes: 16, total_docks: 22, open: true, hours: "24/7", bikes_types: { mechanical: 10, electric: 6 }, contact: "+33123456784" },
+        { name: "Station de La Villette", latitude: 48.8936, longitude: 2.3909, available_bikes: 22, total_docks: 30, open: true, hours: "24/7", bikes_types: { mechanical: 18, electric: 4 }, contact: "+33123456785" },
+        { name: "Station de Marais", latitude: 48.8587, longitude: 2.3584, available_bikes: 9, total_docks: 12, open: false, hours: "00:00-06:00", bikes_types: { mechanical: 6, electric: 3 }, contact: "+33123456786" },
+        { name: "Station de Place d'Italie", latitude: 48.8313, longitude: 2.3558, available_bikes: 14, total_docks: 18, open: true, hours: "24/7", bikes_types: { mechanical: 10, electric: 4 }, contact: "+33123456787" },
+        { name: "Station de République", latitude: 48.8679, longitude: 2.3631, available_bikes: 13, total_docks: 16, open: true, hours: "24/7", bikes_types: { mechanical: 10, electric: 3 }, contact: "+33123456788" }
+    ];
 
-                function toggleFavorite(stationName, event) {
-                    const button = event.target;
-                    const index = favoris.indexOf(stationName);
+    stations.forEach(function(station) {
+        var marker = L.marker([station.latitude, station.longitude]).addTo(map);
+        marker.bindPopup(`<div class="station">
+                          <div class="station-header"><b>${station.name}</b> <button onclick='toggleFavorite("${station.name}", event)' class='addToFave'>🖤</button> </div><br>
+                          Disponibilité: ${station.available_bikes}<br>
+                          Type de vélos: Mécaniques: ${station.bikes_types.mechanical}, Électriques: ${station.bikes_types.electric}<br>
+                          Capacité totale: ${station.total_docks}<br>
+                          Statut: ${station.open ? 'Ouverte' : 'Fermée'}<br>
+                          Heures d'ouverture: ${station.hours}<br>
+                          Contact: ${station.contact}<br>
+                          </div>`);
+    });
 
-                    if (index === -1) {
-                        favoris.push(stationName);
-                        button.classList.add('added');
-                        button.innerHTML = '❤️';
-                    } else {
-                        favoris.splice(index, 1);
-                        button.classList.remove('added');
-                        button.innerHTML = '🖤';
-                    }
-                    updateFavoriteList();
-                }
-                function updateFavoriteList() {
-                    var list = document.getElementById('favorites');
-                    list.innerHTML = '';
-                    favoris.forEach(function(fav) {
-                        var li = document.createElement('li');
-                        li.textContent = fav;
-                        list.appendChild(li);
-                    });
-                }
+    function toggleFavorite(stationName, event) {
+    const button = event.target;
+    const index = favoris.indexOf(stationName);
+    if (index === -1) {
+        favoris.push(stationName);
+        button.classList.add('added');
+        button.innerHTML = '❤️';
+    } else {
+        favoris.splice(index, 1);
+        button.classList.remove('added');
+        button.innerHTML = '🖤';
+    }
+    updateFavoriteList();
+}
 
-                stations.forEach(function(station, index) {
-                    // var marker = L.marker([station.latitude, station.longitude], {icon: bikeIcon}).addTo(map);
-                    var marker = L.marker([station.latitude, station.longitude]).addTo(map);
-                    marker.bindPopup("<b>" + station.name + "</b><br>Disponibilité: " + station.available_bikes +
-                    "<br> <button onclick='toggleFavorite(\"" + station.name + "\", event)' class='addToFave'>🖤</button>");
-                });
-            </script>
+    function updateFavoriteList() {
+        var list = document.getElementById('favorites');
+        list.innerHTML = '';
+        favoris.forEach(function(fav) {
+            var li = document.createElement('li');
+            li.textContent = fav;
+            list.appendChild(li);
+        });
+    }
 
-            <style>
-            .addToFave {
-                background-color: transparent;
-                border: none;
-                cursor: pointer;
-                font-size: 24px;
-                color: #000;
-                transition: color 0.3s ease;
-            }
+</script>
 
-            .addToFave.added {
-                color: #ff0000;
-                animation: pulse 0.3s ease;
-            }
+<style>
+    .addToFave {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        color: black;
+        transition: all 0.3s ease;
+        padding: 5px;
+        border-radius: 50%; /* Bouton rond */
+        display: inline-block;
+        margin: 5px;
+    }
 
-            @keyframes pulse {
-                0% {
-                    transform: scale(1);
-                }
-                50% {
-                    transform: scale(1.1);
-                }
-                100% {
-                    transform: scale(1);
-                }
-            }
-            </style>
-        </body>
-    </html>
+    .addToFave:hover {
+        transform: scale(1.2); /* Grossir légèrement au survol */
+    }
+
+    .added {
+        color: red;
+        animation: pulse 1s;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); color: red; }
+        100% { transform: scale(1); }
+    }
+    .station {
+        display: flex;
+        flex-direction: column;
+    }
+    .station-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        font-size: 15px;
+    }
+</style>
+</body>
+</html>
