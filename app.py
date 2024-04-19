@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 app = Flask("velib")
 
 
@@ -8,7 +8,7 @@ def accueil() :
 
 @app.get("/carte")
 def carte() :
-    return """<h1>Carte</h1>"""
+    return render_template('index.html')
 
 @app.route("/carte/<station>")
 def carte_station(station) :
