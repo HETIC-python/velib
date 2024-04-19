@@ -1,77 +1,125 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Carte des Stations Velib</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-</head>
-<body>
-<h3>Bonjour (prenom)</h3>
-<a href="/favoris"><button>Mes stations favorites</button></a>
-<div id="map" style="width: 100%; height: 750px;"></div>
+    <html>
+        <head>
+            <title>Carte des Stations Velib</title>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        </head>
 
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <body>
 
-<script>
-    var favoris = []
+            <h3>Bonjour (prenom)</h3>
+            
+            <a href="/favoris"><button>Mes stations favorites</button></a>
+            
+            <div id="favoriteList" style="padding: 20px;">
+                <h4>Mes stations favorites:</h4>
+                <ul id="favorites"></ul>
+            </div>
+            
+            <div id="map" style="width: 100%; height: 750px;"></div>
+            <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-    var map = L.map('map').setView([48.8566, 2.3522], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+            <script>
+                var favoris = []
+                var stations = [
+                    { name: "Station de Montmartre", latitude: 48.8867, longitude: 2.3431, available_bikes: 20 },
+                    { name: "Station de Louvre", latitude: 48.8606, longitude: 2.3376, available_bikes: 18 },
+                    { name: "Station de Bastille", latitude: 48.8530, longitude: 2.3698, available_bikes: 15 },
+                    { name: "Station de Tour Eiffel", latitude: 48.8584, longitude: 2.2945, available_bikes: 10 },
+                    { name: "Station de Champs-Élysées", latitude: 48.8696, longitude: 2.3079, available_bikes: 12 },
+                    { name: "Station de Montparnasse", latitude: 48.8422, longitude: 2.3219, available_bikes: 16 },
+                    { name: "Station de La Villette", latitude: 48.8936, longitude: 2.3909, available_bikes: 22 },
+                    { name: "Station de Marais", latitude: 48.8587, longitude: 2.3584, available_bikes: 9 },
+                    { name: "Station de Place d'Italie", latitude: 48.8313, longitude: 2.3558, available_bikes: 14 },
+                    { name: "Station de République", latitude: 48.8679, longitude: 2.3631, available_bikes: 13 }
+                ];
+                var map = L.map('map').setView([48.8566, 2.3522], 12);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
 
-    // var bikeIcon = L.icon({
-    //     iconUrl: 'bike-icon.jpeg', 
-    //     iconSize: [38, 38], 
-    //     iconAnchor: [22, 94], 
-    //     popupAnchor: [-3, -76] 
-    // });
+                // var bikeIcon = L.icon({
+                //     iconUrl: 'bike-icon.jpeg', 
+                //     iconSize: [38, 38], 
+                //     iconAnchor: [22, 94], 
+                //     popupAnchor: [-3, -76] 
+                // });
 
-    if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-        var latlng = [position.coords.latitude, position.coords.longitude];
-        console.log(latlng);
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        var latlng = [position.coords.latitude, position.coords.longitude];
+                        console.log(latlng);
 
-        var markerUser = L.marker(latlng).addTo(map)
-            .bindPopup("Vous êtes ici").openPopup();
+                        var markerUser = L.marker(latlng).addTo(map)
+                            .bindPopup("Vous êtes ici").openPopup();
 
-        // Centre la carte sur la position de l'utilisateur
-        map.setView(latlng, 12);
-    });
-} else {
-    alert("Géolocalisation non supportée par votre navigateur.");
-}
+                        map.setView(latlng, 12);
+                    });
+                } else {
+                    alert("Géolocalisation non supportée par votre navigateur.");
+                }
 
-    function addToFave(stationName) {
-            if (favoris.indexOf(stationName) === -1) {
-                favoris.push(stationName);
-                console.log(favoris);
-            } else {
-                alert(stationName + " est déjà dans vos favoris !"); 
+                function toggleFavorite(stationName, event) {
+                    const button = event.target;
+                    const index = favoris.indexOf(stationName);
+
+                    if (index === -1) {
+                        favoris.push(stationName);
+                        button.classList.add('added');
+                        button.innerHTML = '❤️';
+                    } else {
+                        favoris.splice(index, 1);
+                        button.classList.remove('added');
+                        button.innerHTML = '🖤';
+                    }
+                    updateFavoriteList();
+                }
+                function updateFavoriteList() {
+                    var list = document.getElementById('favorites');
+                    list.innerHTML = '';
+                    favoris.forEach(function(fav) {
+                        var li = document.createElement('li');
+                        li.textContent = fav;
+                        list.appendChild(li);
+                    });
+                }
+
+                stations.forEach(function(station, index) {
+                    // var marker = L.marker([station.latitude, station.longitude], {icon: bikeIcon}).addTo(map);
+                    var marker = L.marker([station.latitude, station.longitude]).addTo(map);
+                    marker.bindPopup("<b>" + station.name + "</b><br>Disponibilité: " + station.available_bikes +
+                    "<br> <button onclick='toggleFavorite(\"" + station.name + "\", event)' class='addToFave'>🖤</button>");
+                });
+            </script>
+
+            <style>
+            .addToFave {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                font-size: 24px;
+                color: #000;
+                transition: color 0.3s ease;
             }
-        }
 
-    var stations = [
-        { name: "Station 1", latitude: 48.8566, longitude: 2.3522, available_bikes: 15 },
-        { name: "Station 2", latitude: 48.8570, longitude: 2.3530, available_bikes: 10 },
-        { name: "Station 3", latitude: 48.8575, longitude: 2.3540, available_bikes: 5 },
-    ];
+            .addToFave.added {
+                color: #ff0000;
+                animation: pulse 0.3s ease;
+            }
 
-    stations.forEach(function(station, index) {
-        // var marker = L.marker([station.latitude, station.longitude], {icon: bikeIcon}).addTo(map);
-        var marker = L.marker([station.latitude, station.longitude]).addTo(map);
-        marker.bindPopup("<b>" + station.name + "</b><br>Disponibilité: " + station.available_bikes +
-        "<br> <button onclick='addToFave(\"" + station.name + "\")' class='addToFave'>Ajouter à mes favoris ❤️</button>");
-    });
-</script>
-<style>
-    .addToFave {
-        background-color: white;
-        border: 1px solid black;
-        padding: 5px 20px;
-        border-radius: 30px;
-    }
-</style>
-</body>
-</html>
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.1);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+            </style>
+        </body>
+    </html>
