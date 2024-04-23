@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign</title>
+    <title>Log</title>
     <style>
         .container {
             max-width: 400px;
@@ -22,7 +22,6 @@
             font-weight: bold;
         }
         
-        input[type="text"],
         input[type="email"],
         input[type="password"] {
             width: 100%;
@@ -46,30 +45,40 @@
             background-color: #0056b3;
         }
         
+        p {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Inscricrivez-vous</h2>
-        <form action="#" method="POST">
-            <div class="form-group">
-                <label for="nom">Nom :</label>
-                <input type="text" id="nom" name="nom" required>
-            </div>
-            <div class="form-group">
-                <label for="prenom">Prénom :</label>
-                <input type="text" id="prenom" name="prenom" required>
-            </div>
+        <h2>Connectez-vous</h2>
+        <form action="/login" method="POST">
             <div class="form-group">
                 <label for="email">Email :</label>
                 <input type="email" id="email" name="email" required>
             </div>
+            {% if msg is not equalto None%} 
+                <pre>{{msg}}</pre>
+            {%endif%}
             <div class="form-group">
                 <label for="motdepasse">Mot de passe :</label>
-                <input type="password" id="motdepasse" name="motdepasse" required>
+                <input type="password" id="motdepasse" name="password" required>
             </div>
-            <button type="submit">S'inscrire</button>
+            <button type="submit">Se connecter</button>
         </form>
+        <p>Vous n'avez pas de compte ? <a href="/signup">Inscrivez-vous ici</a>.</p>
     </div>
 </body>
 </html>

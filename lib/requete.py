@@ -40,7 +40,7 @@ class Requete:
     resultats = list(map(lambda l: dict(zip(entetes, l)), liste))
     return resultats
 
-  # Pour les auitres types d'actions
+  # Pour les autres types d'actions
   def action(self, requete, params=None):
     self.debut()
     self.exec(requete, params)
