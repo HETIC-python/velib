@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lister les favoris</title>
+    <style>
+        .container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input[type="file"],
+select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Liste des stations Favoris</h2>
+        <a href="/fav/new"><button>Créer un favoris</button></a>
+        
+                    {% for favoris in liste %}
+                    <div>
+                        <p>
+                            <img src={{'/image/' + favoris.img_url}} alt="Pas d'image" height="15">
+                            <strong>{{ favoris.libelle }}</strong> <a href={{ favoris.url_view }}>
+                            <button>Voir</button></a> <a href={{ favoris.url_suppression }}>
+                            <button>Supprimer</button></a></p>
+                    </div>
+                        <option value=></option>
+                    {% endfor%}
+            
+    </div>
+</body>
+</html>
