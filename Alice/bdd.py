@@ -1,6 +1,6 @@
-import mysql.connector
+import mariabdb
 
-mydb = mysql.connector.connect(
+mydb = mariabdb.connect(
   host="localhost",
   user="root",
   password="",
