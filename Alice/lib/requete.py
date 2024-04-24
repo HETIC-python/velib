@@ -8,7 +8,7 @@ class Requete:
       "port": 3306,
       "user": "root",
       "password": "",
-      "database": "velib"
+      "database": "api_PDF"
     }
     # Alias pour favoriser/factoriser d'autres requettes
     self.insert = self.action

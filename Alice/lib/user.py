@@ -5,9 +5,17 @@ from lib.password import Password
 stations=[]
 
 def sign(datas):
-  req = Requete()
-  req.insert("INSERT INTO user (uuid,first_name,last_name,email,password) VALUES (?, ?, ?, ?,?)", (datas['user_uuid'],datas['prenom'], datas['nom'], datas['email'],datas['motdepasse']))
+  if is_existed_user(datas['email']) :
+     return False
+  else :
+    req = Requete()
+    req.insert("INSERT INTO user (uuid,first_name,last_name,email,password) VALUES (?, ?, ?, ?,?)", (datas['user_uuid'],datas['prenom'], datas['nom'], datas['email'],datas['motdepasse']))
+    return True
 
+def is_existed_user(email):
+  req = Requete()
+  resultat = req.select("SELECT * FROM user WHERE email = ?", (email))
+  return len(resultat)>0
 
 def login(email, password):
     req = Requete()
