@@ -2,6 +2,7 @@ from flask import Flask, session, redirect, url_for, render_template,send_from_d
 from functools import wraps
 import lib.user as user
 import lib.favorite as fav
+from lib.password import Password  
 import re
 import os
 from uuid import uuid4
@@ -547,8 +548,8 @@ def login_process() :
         return render_template(os.path.join("auth", "login.html.jinja"), msg= "Email ou mot de passe incorrect.")
     else :
         session['user'] = {
-                        'nom' : current_user['lastname'],
-                        "prenom" : current_user['firstname'],
+                        'nom' : current_user['last_name'],
+                        "prenom" : current_user['first_name'],
                         "uuid" : current_user['uuid'],
                         "email" : current_user['email'],
                         }
@@ -569,12 +570,39 @@ def inscription() :
 @app.post("/signup")
 def traitement_inscription() :
     #traiter les information d'inscription et ajouter les cookies
-    return f"""<h1>Inscription</h1>"""
+    email = request.form["email"]
+    motdepasse = Password()
+    motdepasse =  Password.set_password(request.form["motdepasse"])  
+    prenom = request.form["prenom"] 
+    nom = request.form["nom"] 
+    user_uuid = uuid4().hex
+    current_user = ""
 
-@app.route("/Logout")
-def deconnexion() :
-    #traiter les information d'inscription et ajouter les cookies
-    return f"""<h1>deconnexion</h1>"""
+    regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+    # email valide ?
+    if re.fullmatch(regex, email) : 
+        is_signed = user.sign({"email" : email,
+                "motdepasse" : motdepasse,
+                "prenom" : prenom,
+                "nom" : nom,
+                "user_uuid" : user_uuid} )
+        
+        if not is_signed :
+            return render_template(os.path.join("auth", "signin.html.jinja"), msg= "Cet utilisateur existe déjà. Connectez-vous.")
+        else :
+            current_user = user.login(email,request.form["motdepasse"]) #ça ne peut qu'etre succès, c'est la 1ere connexion
+            #Assignation des valeurs de session
+            session['user'] = {
+                            'nom' : current_user['last_name'],
+                            "prenom" : current_user['first_name'],
+                            "uuid" : current_user['uuid'],
+                            "email" : current_user['email'],
+                            }
+
+            return redirect(url_for("accueil"))
+    else :
+       return render_template(os.path.join("auth", "signin.html.jinja"), msg= "Email invalide 💀.")
+   
 
 
 @app.put("/user")

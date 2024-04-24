@@ -68,8 +68,18 @@
                 <label for="motdepasse">Mot de passe :</label>
                 <input type="password" id="motdepasse" name="motdepasse" required>
             </div>
+
+            {% if msg is not equalto None and msg|length > 0 %} 
+                <pre>{{msg}}</pre>
+            {%endif%}
+
             <button type="submit">S'inscrire</button>
         </form>
+        {% if msg is not equalto None and msg|length > 0 %} 
+                <p> <a href="/login">Connectez-vous</a>.</p>
+        {%endif%}
+                
+
     </div>
 </body>
 </html>
