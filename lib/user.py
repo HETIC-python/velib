@@ -1,18 +1,19 @@
 from .requete import Requete
 import json
 import os
+from lib.password import Password
 stations=[]
 
 def sign(datas):
   req = Requete()
-  req.insert("INSERT INTO user (uuid,firstname,lastname,email,password) VALUES (?, ?, ?, ?,?)", (datas['uuid'],datas['firstname'], datas['lastname'], datas['email'],datas['password']))
+  req.insert("INSERT INTO user (uuid,first_name,last_name,email,password) VALUES (?, ?, ?, ?,?)", (datas['user_uuid'],datas['prenom'], datas['nom'], datas['email'],datas['motdepasse']))
 
 
 def login(email, password):
     req = Requete()
-    resultat = req.select("SELECT * FROM user WHERE email = ? AND password = ?", (email,password))
-
-    if len(resultat) == 1 :
+    resultat = req.select("SELECT * FROM user WHERE email = ?", (email))
+    check_password = Password.check_password(email,password)
+    if len(resultat) == 1 and check_password :
        return resultat[0]
     else :
        return False

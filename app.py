@@ -4,7 +4,7 @@ import lib.user as user
 import re
 import os
 from uuid import uuid4
-
+from lib.password import Password  
 app = Flask("velib")
 app.secret_key = b"ee18fcfbf6b7351ca99adb553a5a9d056538956ad9244fd622f4d93250ee3fce"
 
@@ -80,13 +80,47 @@ def login() :
 
 @app.get("/signup")
 def inscription() :
+
     return render_template("./auth/signin.html.jinja")
 
 
 @app.post("/signup")
 def traitement_inscription() :
     #traiter les information d'inscription et ajouter les cookies
-    return f"""<h1>Inscription</h1>"""
+    email = request.form["email"]
+    motdepasse = Password()
+    motdepasse =  Password.set_password(request.form["motdepasse"])  
+    prenom = request.form["prenom"] 
+    nom = request.form["nom"] 
+    user_uuid = uuid4().hex
+    current_user = ""
+
+    regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+    # email valide ?
+    if re.fullmatch(regex, email) :
+        current_user = user.login(email,request.form["motdepasse"])
+        print(current_user)
+        if not current_user : 
+            user.sign({"email" : email,
+                    "motdepasse" : motdepasse,
+                    "prenom" : prenom,
+                    "nom" : nom,
+                    "user_uuid" : user_uuid} )
+            current_user = user.login(email,request.form["motdepasse"])
+    #Route d'erreur 
+    if not current_user:
+        return render_template("./auth/signin.html.jinja", msg= "Email ou mot de passe incorrect.")
+    #Route de succès
+    else :
+        #Assignation des valeurs de session
+        session['user'] = {
+                        'nom' : current_user['last_name'],
+                        "prenom" : current_user['first_name'],
+                        "uuid" : current_user['uuid'],
+                        "email" : current_user['email'],
+                        }
+
+        return redirect(url_for("accueil"))
 
 @app.route("/Logout")
 def deconnexion() :
