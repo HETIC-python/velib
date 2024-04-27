@@ -5,28 +5,97 @@
 {{header.makeHeader("Infos d'une station","https://unpkg.com/leaflet@1.7.1/dist/leaflet.css")}}
 
 <style>
-svg {
-    height:20px;
+.add-to-favorites {
+    background-color: #ffcc00;
+    border: none;
 }
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.actions button {
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.conteneur {
+    max-width: 900px;
+    margin:  auto;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.station-details {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.station-details img {
+    width: 70%;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.info {
+    flex: 1;
+}
+
+.info h3 {
+    margin-top: 0;
+}
+
+.info p {
+    margin: 5px 0;
+}
+
+
 </style>
-    <p><strong>Nom de station : {{station.name}}</strong></p>
-    <p><strong>Nombre de velibs disponibles : {{station.numbikesavailable}}</strong></p>
-    <ul>
-    <li>Velib mechanique : {{station.mechanical}}</li>
-    <li>Velib electronique : {{station.ebike}}</li>
-    </ul>
-    <p><strong> Commune : {{station.nom_arrondissement_communes}}</strong></p>
-    <div id="map"  style="width: 90%; height: 400px; margin:auto;"></div>
 
-            {% if session['user'] %}
-            <a href="/fav/auto/{{station.stationcode}}">
-                <button>
-                Ajouter aux favoris 
-                    <svg fill="#000000" viewBox="-1 0 19 19" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M16.417 9.583A7.917 7.917 0 1 1 8.5 1.666a7.917 7.917 0 0 1 7.917 7.917zm-3.08-1.993-1.472-.174-1.485-.176-1.247-2.704c-.345-.747-.908-.747-1.253 0L6.633 7.24l-1.485.176-1.471.174c-.817.097-.991.633-.387 1.192l1.088 1.006 1.098 1.015-.292 1.467-.289 1.453c-.16.807.296 1.138 1.014.737l2.598-1.455 2.598 1.455c.717.401 1.173.07 1.013-.737l-.58-2.92 1.097-1.015 1.089-1.006c.604-.559.43-1.095-.387-1.192z"></path></g></svg>
-                </button>
-            </a>
-            {% endif%}
+<div class="conteneur">
+        <h2>Station Details</h2>
+        <div class="station-details">
+            <img 
+                {% if station.stationcode | int is divisibleby  2 %}
+                    src="https://i0.wp.com/www.nouvellesdefontenay.fr/wp-content/uploads/2018/11/Station_Velib_Jaur%C3%A8s.jpg" 
+                    {% elif station.stationcode | int is divisibleby  3 %}
+                    src="https://leparisien.fr/resizer/OQi1gqxlkbdvnzkHfkz7D1KGDhk=/1200x675/arc-anglerfish-eu-central-1-prod-leparisien.s3.amazonaws.com/public/RKP62IMV74M6HVCJORAKM6YWQI.jpg" 
+                    {% elif station.stationcode | int is divisibleby  5 %}
+                    src="https://www.francebleu.fr/s3/cruiser-production/2021/04/0796d046-4000-4656-9964-1b706339acf3/1200x680_velib_station.jpg" 
+                    {% elif station.stationcode | int is divisibleby  7 %}
+                    src="https://blog.velib-metropole.fr/wp-content/uploads/2021/04/velib-cable-station-1-1024x682.jpg" 
+                    {% else %}
+                    src="https://offloadmedia.feverup.com/parissecret.com/wp-content/uploads/2021/04/21054222/Copie-de-Design-sans-titre-82-1024x576.jpg" 
+                {% endif%}
+                alt="Station {{station.stationcode}}">
 
+                <div class="info">
+                    <h3>{{station.name}}</h3>
+                    <p><strong>Arrondissement:</strong> {{station.nom_arrondissement_communes}}</p>
+                    <p><strong>Nombre de velibs disponibles:</strong>{{station.numbikesavailable}}</p>
+                    <ul>
+                        <li>Velib mechanique : {{station.mechanical}}</li>
+                        <li>Velib electronique : {{station.ebike}}</li>
+                    </ul>
+                    <p><strong>Capacité :</strong> {{station.capacity}}</p>
+                    <div class="actions">
+                    {% if session['user'] %}
+                        <a href="/fav/auto/{{station.stationcode}}">
+                            <button class="add-to-favorites">&#9825;</button>
+                        </a>
+                    {% endif%}
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div id="map"  style="width: 900px; height: 500px; margin:1px auto;"></div>
 {{footer.makeFooter()}}
 {{map.mapMaker('one',[station] )}}
 

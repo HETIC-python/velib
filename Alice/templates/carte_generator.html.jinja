@@ -12,7 +12,7 @@
     if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
         var latlng = [position.coords.latitude, position.coords.longitude];
-        console.log(latlng);
+        map.setView(latlng, 12);
 
         {% if type is equalto "one" %}
             var markerUser = L.marker(latlng).addTo(map)
@@ -20,10 +20,9 @@
                 var marker = L.marker([{{station.coordonnees_geo.lat}}, {{station.coordonnees_geo.lon}}]).addTo(map);
                 marker.bindPopup("<b>" + "{{station.name}}" + "</b><br>Disponibilité: " + "{{station.numbikesavailable}}" +
                 "<br> <a href='/fav/auto/{{station.stationcode}}'> <button class='addToFave'>Ajouter à mes favoris ❤️</button> </a>").openPopup();
-                map.setView([{{station.coordonnees_geo.lat}}, {{station.coordonnees_geo.lon}}], 12);
+                map.setView([{{station.coordonnees_geo.lat}}, {{station.coordonnees_geo.lon}}], 20);
         {% endif %}
         // Centre la carte sur la position de l'utilisateur
-        map.setView(latlng, 12);
     });
 } else {
     alert("Géolocalisation non supportée par votre navigateur.");

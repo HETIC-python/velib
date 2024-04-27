@@ -22,7 +22,6 @@ def fetch_data():
     r = requests.get(API_URL)
     temp_data["data"] = json.dumps(r.json())
     data=temp_data.get("data")
-    print(data)
     print("\n\n\n\n")
 
 def find_station_by_id(id, data):
@@ -79,5 +78,3 @@ while True:
         break
 
 srv_socket.close()
-"""GET / HTTP/1.1
-Host: 192.168.1.235:8080"""
