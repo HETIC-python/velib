@@ -15,8 +15,8 @@
 ## Comment démarrer le projet : 
 
 ## Etape 1
-    - Charger le fichier `velib.sql` comme base de données.
-    - Accéder au fichier `Alice/lib/requette.py` pour vérifier/reconfiguer les infos de connexion.
+- Charger le fichier `velib.sql`  du dossier `Alice/` comme base de données.
+- Accéder au fichier `Alice/lib/requette.py` pour vérifier/reconfiguer les infos de connexion.
 
 ## Lancer les serveurs
 
