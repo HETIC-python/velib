@@ -20,11 +20,15 @@ def is_existed_user(email):
 def login(email, password):
     req = Requete()
     resultat = req.select("SELECT * FROM user WHERE email = ?", (email))
-    check_password = Password.check_password(email,password)
-    if len(resultat) == 1 and check_password :
-       return resultat[0]
-    else :
-       return False
+    try :
+      check_password = Password.check_password(email,password)
+      if len(resultat) == 1 and check_password :
+        return resultat[0]
+      else :
+        return False
+    except :
+        return False
+
 
 def delete_account(uuid):
   req = Requete()
