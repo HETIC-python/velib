@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : mer. 24 avr. 2024 à 10:46
+-- Généré le : sam. 27 avr. 2024 à 03:51
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 8.1.12
 
@@ -32,7 +32,11 @@ CREATE TABLE `favoris` (
   `station_name` varchar(255) NOT NULL,
   `user_uuid` varchar(255) NOT NULL,
   `picture_name` varchar(255) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `stationcode` int(11) NOT NULL,
+  `longitude` float NOT NULL,
+  `latitude` float NOT NULL,
+  `numbikesavailable` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

@@ -1,0 +1,90 @@
+{% macro makeHeader(title,link="") -%}
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href={{link}} />
+        <title>{{title}}</title>
+
+        <style>
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+            }
+            
+            header {
+                background-color: #333;
+                color: #fff;
+                padding: 10px 0;
+                margin-bottom: 15px;
+            }
+            
+            .container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+            
+            .logo a {
+                color: #fff;
+                text-decoration: none;
+                font-size: 24px;
+            }
+            
+            nav ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+            }
+            
+            nav ul li {
+                display: inline-block;
+                margin-right: 20px;
+            }
+            
+            nav ul li a {
+                color: #fff;
+                text-decoration: none;
+            }
+            
+            .user-options a {
+                color: #fff;
+                text-decoration: none;
+                margin-left: 20px;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div class="logo">
+                    <a href="/">Site</a>
+                </div>
+                
+                <nav>
+                    <ul>
+                        {% if not session['user'] %}
+                        <li><a href="/signup">S'inscrire</a></li>
+                        <li><a href="/login">Se connecter</a></li>
+                        {% endif%}
+
+                        {% if session['user'] %}
+                            <li><a href="/fav">Favoris</a></li>
+                        {% endif%}
+                        <li><a href="/carte">Carte de Paris</a></li>
+                    </ul>
+                </nav>
+                {% if session['user'] %}
+                    <div class="user-options">
+                        <a href="/user">Profil</a>
+                        <a href="/logout">Se déconnecter</a>
+                    </div>
+                {% endif%}
+            </div>
+        </header>
+{%- endmacro %}

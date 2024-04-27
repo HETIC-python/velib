@@ -1,0 +1,54 @@
+{% import 'header.html.jinja' as header %}
+{% import 'footer.html.jinja' as footer %}
+{{header.makeHeader("Profil" )}}
+
+<style>
+    
+    .conteneur {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    
+    h2 {
+        text-align: center;
+    }
+    
+    .profile-info {
+        margin-top: 30px;
+    }
+    
+    .info-item {
+        margin-bottom: 20px;
+    }
+    
+    .label {
+        font-weight: bold;
+    }
+    
+    .value {
+        margin-left: 10px;
+    }
+    
+</style>
+<div class="conteneur">
+    <h2>Profil Utilisateur</h2>
+    <div class="profile-info">
+        <div class="info-item">
+            <span class="label">Nom :</span>
+            <span class="value">{{session['user']["nom"]}}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Prénom :</span>
+            <span class="value">{{session['user']["prenom"]}}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Email :</span>
+            <span class="value">{{session['user']["email"]}}</span>
+        </div>
+    </div>
+</div>
+{{footer.makeFooter()}}
+</html>

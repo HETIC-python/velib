@@ -1,0 +1,8 @@
+{% import 'carte_generator.html.jinja' as map %}
+{% import 'header.html.jinja' as header %}
+{% import 'footer.html.jinja' as footer %}
+{{header.makeHeader("Carte de Paris","https://unpkg.com/leaflet@1.7.1/dist/leaflet.css")}}
+
+<div id="map"  style="width: 100%; height: 750px;"></div>
+{{footer.makeFooter()}}
+{{map.mapMaker('all',stations )}}

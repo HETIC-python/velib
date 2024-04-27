@@ -3,12 +3,13 @@ import requests
 import json
 from datetime import datetime
 
-API_URL='https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-disponibilite-en-temps-reel/records?timezone=Europe%2FParis&refine=nom_arrondissement_communes%3A%22Paris%22'
+API_URL="https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-disponibilite-en-temps-reel/records?limit=50"
+# https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-disponibilite-en-temps-reel/records?timezone=Europe%2FParis&refine=nom_arrondissement_communes%3A%22Paris%22' <==== Pour le prof ne retourne que 10 stations
 
 # Init
 srv_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 srv_host = socket.gethostname()
-srv_port = 8080
+srv_port = 8081
 srv_socket.bind((srv_host, srv_port))
 srv_socket.listen(5)
 temp_data = {}
@@ -36,7 +37,7 @@ while True:
         print(f"Waiting for new connection on port {srv_port}")
         client, adresse = srv_socket.accept()
         print(f"Connexion entrante de {adresse}")
-        requete = client.recv(10000)
+        requete = client.recv(1000000)
         requete = requete.decode()
         method, url, http_v = requete.splitlines()[0].split(" ")
         ## nethod to handle fetch logic

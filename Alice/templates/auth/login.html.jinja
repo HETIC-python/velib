@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log</title>
+{% import 'header.html.jinja' as header %}
+{% import 'footer.html.jinja' as footer %}
+
+{{header.makeHeader("Se connecter" )}}
     <style>
-        .container {
-            max-width: 400px;
+        .conteneur {
+            max-width: 500px;
             margin: 0 auto;
             padding: 20px;
             border: 1px solid #ccc;
@@ -24,8 +22,9 @@
         
         input[type="email"],
         input[type="password"] {
-            width: 100%;
+            width: 95%;
             padding: 10px;
+            margin: auto;
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid #ccc;
@@ -60,9 +59,8 @@
         }
         
     </style>
-</head>
-<body>
-    <div class="container">
+
+    <div class="conteneur">
         <h2>Connectez-vous</h2>
         <form action="/login" method="POST">
             <div class="form-group">
@@ -80,5 +78,5 @@
         </form>
         <p>Vous n'avez pas de compte ? <a href="/signup">Inscrivez-vous ici</a>.</p>
     </div>
-</body>
+{{footer.makeFooter()}}
 </html>

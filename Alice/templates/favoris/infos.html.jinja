@@ -1,14 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>infos d'un favoris</title>
-</head>
-<body>
+{% import 'carte_generator.html.jinja' as map %}
+{% import 'header.html.jinja' as header %}
+{% import 'footer.html.jinja' as footer %}
+
+{{header.makeHeader("Infos d'un favoris","https://unpkg.com/leaflet@1.7.1/dist/leaflet.css")}}
+
     <img src={{'/image/' + image_url}} alt="Vous n'avez pas encore défini une image pour votre station. veillez modifier le favoris">
     <p><strong>{{favoris['station_name']}}</strong></p>
+
+    <div id="map"  style="width: 90%; height: 400px; margin:auto;"></div>
+
     <a href={{update_url}}><button>Modifier</button></a>
-    <a href="/fav">>Retour à la liste</a>
-</body>
+{{footer.makeFooter()}}
+{{map.mapMaker('one',[station] )}}
 </html>
