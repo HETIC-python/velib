@@ -4,12 +4,85 @@
 
 {{header.makeHeader("Infos d'un favoris","https://unpkg.com/leaflet@1.7.1/dist/leaflet.css")}}
 
-    <img src={{'/image/' + image_url}} alt="Vous n'avez pas encore défini une image pour votre station. veillez modifier le favoris">
-    <p><strong>{{favoris['station_name']}}</strong></p>
+<style>
+.modify {
+    background-color: #007bff; 
+    color: #fff;
+    border: none;
+}
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
 
-    <div id="map"  style="width: 90%; height: 400px; margin:auto;"></div>
+.actions button {
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-    <a href={{update_url}}><button>Modifier</button></a>
+.conteneur {
+    max-width: 900px;
+    margin:  auto;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.station-details {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.station-details img {
+    width: 70%;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.info {
+    flex: 1;
+}
+
+.info h3 {
+    margin-top: 0;
+}
+
+.info p {
+    margin: 5px 0;
+}
+
+</style>
+<div class="conteneur">
+        <h2>Station Details</h2>
+        <div class="station-details">
+            <img 
+                {% if image_url | length is not equalto  37 %}
+                    src={{'/image/' + image_url}}                    
+                    {% else %}
+                    src="https://static.vecteezy.com/ti/vecteur-libre/p1/12181008-document-donnees-fichier-introuvable-concept-illustration-design-plat-vecteur-eps10-element-graphique-moderne-pour-la-page-de-destination-l-interface-utilisateur-d-etat-vide-l-infographie-l-icone-etc-vectoriel.jpg" 
+                {% endif%}
+                alt="Station {{station.stationcode}}">
+
+                <div class="info">
+                    <h3>{{station.name}}</h3>
+                    <p><strong>Nombre de velibs disponibles:</strong>{{station.numbikesavailable}}</p>
+                    <div class="actions">
+                        <a href={{update_url}}>
+                            <button class="modify">&#9998;</button>
+                        </a>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <div id="map"  style="width: 900px; height: 500px; margin:auto;"></div>
+
 {{footer.makeFooter()}}
 {{map.mapMaker('one',[station] )}}
 </html>

@@ -4,30 +4,96 @@
 {{header.makeHeader("Lister les favoris")}}
 
     <style>
-        .conteneur {
-    max-width: 500px;
-    margin: 0 auto;
+.conteneur {
+    max-width: 1200px;
+    margin: 50px auto;
     padding: 20px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.station-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.station {
+    width: 30%;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    padding: 10px;
+}
+
+.station img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.station-info {
+    margin-top: 10px;
+}
+
+.station-info h3 {
+    margin: 0;
+}
+
+.station-info p {
+    margin: 5px 0;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.actions button {
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.details {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+}
+
+.delete {
+    background-color: #ff6347; /* Rouge */
+    color: #fff;
+    border: none;
 }
     </style>
-
-    <div class="conteneur">
-        <h2>Liste des stations Favoris</h2>
-        <a href="/fav/new"><button>Créer un favoris</button></a>
-        
+<div class="conteneur">
+        <h2>Liste des Stations favoris</h2>
+        <div class="station-list">
                     {% for favoris in liste %}
-                    <div>
-                        <p>
-                            <img src={{'/image/' + favoris.img_url}} alt="Pas d'image" height="15">
-                            <strong>{{ favoris.libelle }}</strong> <a href={{ favoris.url_view }}>
-                            <button>Voir</button></a> <a href={{ favoris.url_suppression }}>
-                            <button>Supprimer</button></a></p>
-                    </div>
-                        <option value=></option>
+                    <div class="station">
+                <img 
+                {% if favoris.img_url | length is not equalto  37 %}
+                    src={{'/image/' + favoris.img_url}}                    
+                    {% else %}
+                    src="https://static.vecteezy.com/ti/vecteur-libre/p1/12181008-document-donnees-fichier-introuvable-concept-illustration-design-plat-vecteur-eps10-element-graphique-moderne-pour-la-page-de-destination-l-interface-utilisateur-d-etat-vide-l-infographie-l-icone-etc-vectoriel.jpg" 
+                {% endif%}
+                alt="Station favoris">
+                <div class="station-info">
+                    <h3>{{ favoris.libelle }}</h3>
+                </div>
+                <div class="actions">
+                    <a href={{ favoris.url_view }} ><button class="details">&#x1F50D;</button></a>
+                    <a href={{ favoris.url_suppression }}>
+                        <button class="delete">&#x1F5D1;</button>
+                    </a>
+                </div>
+    </div>
                     {% endfor%}
-            
+                </div>
     </div>
 {{footer.makeFooter()}}
 </html>
