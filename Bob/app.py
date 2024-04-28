@@ -63,9 +63,8 @@ while True:
             handle_data_fetching_every_5_min()
 
             if url == "/":
-                if temp_data.get("last_used"):
-                    data = temp_data.get("data")
-                    client.send(f"""HTTP/1.1 200 OK\nContent-Type: application/json\n\n{data}""".encode())
+                data = temp_data.get("data")
+                client.send(f"""HTTP/1.1 200 OK\nContent-Type: application/json\n\n{data}""".encode())
             elif url != "/favicon.ico":
                 print("method and url", method, url)
                 id = url[1:]

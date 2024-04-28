@@ -1,7 +1,8 @@
 import requests
-import json
-
-BOB_URL_SOURCE = "http://127.0.0.1:8081/"
+import socket
+api_host = socket.gethostname()
+api_port = 8081
+BOB_URL_SOURCE = f"http://{api_host}:{api_port}"
 
 
 
@@ -11,5 +12,5 @@ def get_all_stations() :
     return data["results"]
 
 def get_one_station(stationcode) :
-    r = requests.get(f"{BOB_URL_SOURCE}{stationcode}")
+    r = requests.get(f"{BOB_URL_SOURCE}/{stationcode}")
     return r.json()
