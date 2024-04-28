@@ -1,10 +1,12 @@
 import mariadb
+import socket
+api_host = socket.gethostname()
 
 class Requete:
   def __init__(self):
     # Configuration des infos de connexion
     self.config = {
-      "host": "127.0.0.1",
+      "host": f"{api_host}",
       "port": 3306,
       "user": "root",
       "password": "",
