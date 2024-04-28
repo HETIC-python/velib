@@ -1,6 +1,7 @@
 import mariadb
 import socket
-api_host = socket.gethostname()
+# api_host = socket.gethostname()
+api_host = "127.0.0.1"
 
 class Requete:
   def __init__(self):
