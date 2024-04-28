@@ -38,7 +38,7 @@ Ouvrez un terminal pour chacun des dossiers
 
 |       |   Alice |   Bob/api |
 |---    |:-:    |:-:    |
-|  Action 1   |   ```cd ./Alice```   |   ```cd ./api``` |
+|  Action 1   |   ```cd ./Alice```   |   ```cd ./Bob``` |
 |   Action 2;   |   ```flask run --debug```  |   ```python app.py``` ou `python3 app.py` si besoin |
 
 ---
