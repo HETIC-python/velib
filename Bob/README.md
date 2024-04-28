@@ -31,7 +31,11 @@
   r = requests.get(f"{API_URL}/16107", headers={"Content-Type":"application/json"})
   res = r.json()
   # resultat attendu:
-  # {"total_count": 992, "results": [100 stations]}
+  # {"total_count": 992, "results": [
+
+    # {"stationcode": "11104", "name": "Charonne - Robert et Sonia Delaunay", "is_installed": "OUI", "capacity": 20, "numdocksavailable": 9, "numbikesavailable": 9, "mechanical": 3, "ebike": 6, "is_renting": "OUI", "is_returning": "OUI", "duedate": "2024-04-28T06:33:55+00:00", "coordonnees_geo": {"lon": 2.3925706744194, "lat": 48.855907555969}, "nom_arrondissement_communes": "Paris", "code_insee_commune": null}
+
+  # ]}
 ```
 
 ```python
@@ -41,7 +45,9 @@
 
   res = r.json()
   # resultat attendu
-  # {} -> station velib
+  # {"stationcode": "11104", "name": "Charonne - Robert et Sonia Delaunay", "is_installed": "OUI", "capacity": 20, "numdocksavailable": 9, "numbikesavailable": 9, "mechanical": 3, "ebike": 6, "is_renting": "OUI", "is_returning": "OUI", "duedate": "2024-04-28T06:33:55+00:00", "coordonnees_geo": {"lon": 2.3925706744194, "lat": 48.855907555969}, "nom_arrondissement_communes": "Paris", "code_insee_commune": null} -> station velib
+  # OU
+  # {} -> station vide
 ```
 
 

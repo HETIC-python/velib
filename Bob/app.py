@@ -17,19 +17,35 @@ temp_data = {}
 
 FIVE_MIN_IN_SECONDS = 300
 
+
+def handle_data_fetching_every_5_min():
+    if temp_data.get("last_used"):
+        print("trying old data")
+        new_date = datetime.now()
+        last_used = temp_data.get("last_used", new_date)
+        diff = int((new_date - last_used).total_seconds())
+        print("diff in seconds ->", diff)
+        if diff >= FIVE_MIN_IN_SECONDS:
+            fetch_data()
+    else:  
+        print("fetching data")
+        fetch_data()
+
 def fetch_data():
     print("fetching data")
     temp_data["last_used"] = datetime.now()
     r = requests.get(API_URL)
     temp_data["data"] = json.dumps(r.json())
     data=temp_data.get("data")
-    print("\n\n\n\n")
+    print("FETCHED DATA:", data, "\n\n\n\n")
 
 def find_station_by_id(id, data):
     for d in data:
         if d.get("stationcode") == id:
             return d
+    
     return {}
+
 
 while True:
     try:
@@ -37,30 +53,21 @@ while True:
         print(f"Waiting for new connection on port {srv_port}")
         client, adresse = srv_socket.accept()
         print(f"Connexion entrante de {adresse}")
-        requete = client.recv(1000)
+        requete = client.recv(10000)
         requete = requete.decode()
 
         print("===========", requete)
         method, url, http_v = requete.splitlines()[0].split(" ")
         ## nethod to handle fetch logic
         try:
-            if temp_data.get("last_used"):
-                print("trying old data")
-                new_date = datetime.now()
-                last_used = temp_data.get("last_used", new_date)
-                diff = int((new_date - last_used).total_seconds())
-                print("="*10, diff)
-                if diff >= FIVE_MIN_IN_SECONDS:
-                    fetch_data()
-            else:  
-                fetch_data()
+            handle_data_fetching_every_5_min()
 
             if url == "/":
                 if temp_data.get("last_used"):
-                    data=temp_data.get("data")
+                    data = temp_data.get("data")
                     client.send(f"""HTTP/1.1 200 OK\nContent-Type: application/json\n\n{data}""".encode())
             elif url != "/favicon.ico":
-                print(method, url)
+                print("method and url", method, url)
                 id = url[1:]
                 data = temp_data.get("data", "")
                 if data == "":
@@ -77,7 +84,7 @@ while True:
 
         client.close()
     except Exception as err:
-        print(err)
+        print("exception", err)
         break
 
 srv_socket.close()
