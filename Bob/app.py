@@ -3,7 +3,7 @@ import requests
 import json
 from datetime import datetime
 
-API_URL="https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-disponibilite-en-temps-reel/records?limit=50"
+API_URL="https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-disponibilite-en-temps-reel/records?limit=100"
 # https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-disponibilite-en-temps-reel/records?timezone=Europe%2FParis&refine=nom_arrondissement_communes%3A%22Paris%22' <==== Pour le prof ne retourne que 10 stations
 
 # Init
@@ -15,6 +15,7 @@ srv_socket.listen(5)
 temp_data = {}
 # Boucle infinie
 
+FIVE_MIN_IN_SECONDS = 300
 
 def fetch_data():
     print("fetching data")
@@ -36,8 +37,10 @@ while True:
         print(f"Waiting for new connection on port {srv_port}")
         client, adresse = srv_socket.accept()
         print(f"Connexion entrante de {adresse}")
-        requete = client.recv(1000000)
+        requete = client.recv(1000)
         requete = requete.decode()
+
+        print("===========", requete)
         method, url, http_v = requete.splitlines()[0].split(" ")
         ## nethod to handle fetch logic
         try:
@@ -47,7 +50,7 @@ while True:
                 last_used = temp_data.get("last_used", new_date)
                 diff = int((new_date - last_used).total_seconds())
                 print("="*10, diff)
-                if diff >= 300:
+                if diff >= FIVE_MIN_IN_SECONDS:
                     fetch_data()
             else:  
                 fetch_data()
