@@ -25,9 +25,13 @@ Installer les librairies disponibles dans le fichier `requirement.txt` avec :
 ```pip3 install -r requirements.txt``` (En étant à la source du projet).
 
 ## Etape 3
+> [!NOTE]  
+> More informations about `Bob` server is present in [Bob readme](./Bob/README.md)
+
+
 Par défaut l'api tourne sur le port `8081`, s'il est occupé :
-    - Allez dans `api/app.py` et renseigner un port disponible 
-    - Allez dans `Alice/lib/api.py` et adapter BOB_URL_SOURCE à votre nouveau port.
+- Allez dans `api/app.py` et renseigner un port disponible 
+- Allez dans `Alice/lib/api.py` et adapter BOB_URL_SOURCE à votre nouveau port.
     
 ## Etape 4
 Ouvrez un terminal pour chacun des dossiers
